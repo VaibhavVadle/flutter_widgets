@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_widgets/bloc/obscure_icon_bloc/obscure_icon_bloc.dart';
+import 'package:flutter_widgets/utils/constants/constants.dart';
 
 import '../utils/app_theme_data.dart';
 
@@ -35,7 +37,7 @@ class TextField2 extends StatelessWidget {
     this.textStyle,
     this.hintStyle,
     this.contentPadding =
-    const EdgeInsets.symmetric(horizontal: 12, vertical: 18),
+        const EdgeInsets.symmetric(horizontal: 12, vertical: 18),
     this.focusBorderColor = AppThemeData.yellow,
     this.isDense,
     this.fillColor,
@@ -76,12 +78,12 @@ class TextField2 extends StatelessWidget {
   final Color borderColor;
   final bool autoFocus;
 
-  TextStyle get style => textStyle ?? AppStyle.semiLarge.semiBold;
+  TextStyle get style => textStyle ?? AppStyle.title3;
 
   InputBorder get border => OutlineInputBorder(
-    borderSide: BorderSide(width: 1, color: borderColor),
-    borderRadius: BorderRadius.circular(borderRadius),
-  );
+        borderSide: BorderSide(width: 1, color: borderColor),
+        borderRadius: BorderRadius.circular(borderRadius),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -108,13 +110,15 @@ class TextField2 extends StatelessWidget {
                           TextSpan(children: [
                             TextSpan(
                               text: label,
-                              style: AppStyles.medium.semiBold,
+                              style: AppStyle.body
+                                  .copyWith(color: AppThemeData.grey700),
                             ),
                             if (isRequired)
                               TextSpan(
                                 text: '*',
-                                style: AppStyles.medium.semiBold
-                                    .copyWith(color: AppColors.darkPink),
+                                style: AppStyle.body
+                                    .copyWith(color: AppThemeData.grey700)
+                                    .copyWith(color: AppThemeData.red),
                               ),
                           ]),
                         ),
@@ -123,8 +127,7 @@ class TextField2 extends StatelessWidget {
                             padding: const EdgeInsets.only(left: 5.0),
                             child: Text(
                               subLabel!,
-                              style: AppStyles.extraSmall.normal
-                                  .copyWith(color: AppColors.hintColor),
+                              style: AppStyle.defaultF12W5HintColor,
                             ),
                           ),
                       ],
@@ -135,107 +138,109 @@ class TextField2 extends StatelessWidget {
               ),
             BlocBuilder<ObscureIconBloc, ObscureIconState>(
                 builder: (obscureIconContext, obscureIconState) {
-                  return IgnorePointer(
-                    ignoring: disabled ?? readOnly,
-                    child: SizedBox(
-                      height: height,
-                      child: TextFormField(
-                        controller: controller,
-                        focusNode: focusNode,
-                        textInputAction: textInputAction,
-                        keyboardType: keyboardType,
-                        autofocus: autoFocus,
-                        maxLines: keyboardType == TextInputType.multiline
-                            ? null
-                            : maxLines,
-                        maxLength: maxLength,
-                        validator: validator,
-                        buildCounter: (BuildContext context,
-                            {required int currentLength,
-                              required int? maxLength,
-                              required bool isFocused}) {
-                          return null; // Display the character count
-                        },
-                        obscureText:
+              return IgnorePointer(
+                ignoring: disabled ?? readOnly,
+                child: SizedBox(
+                  height: height,
+                  child: TextFormField(
+                    controller: controller,
+                    focusNode: focusNode,
+                    textInputAction: textInputAction,
+                    keyboardType: keyboardType,
+                    autofocus: autoFocus,
+                    maxLines: keyboardType == TextInputType.multiline
+                        ? null
+                        : maxLines,
+                    maxLength: maxLength,
+                    validator: validator,
+                    buildCounter: (BuildContext context,
+                        {required int currentLength,
+                        required int? maxLength,
+                        required bool isFocused}) {
+                      return null; // Display the character count
+                    },
+                    obscureText:
                         isPassword ? obscureIconState.iconState : false,
-                        inputFormatters: inputFormatters,
-                        onChanged: onChanged,
-                        onTap: onTap,
-                        cursorColor: AppColors.black,
-                        readOnly: readOnly,
-                        style: style.copyWith(
-                            color: readOnly ? AppColors.hintColor : null),
-                        decoration: InputDecoration(
-                          isDense: isDense,
-                          filled: true,
-                          fillColor: fillColor ??
-                              (readOnly ? AppColors.offWhite : AppColors.white),
-                          hintText: hintText,
-                          errorText: errorText,
-                          contentPadding: EdgeInsets.only(
-                              right: contentPadding.horizontal / 2,
-                              top: contentPadding.vertical / 2,
-                              bottom: contentPadding.vertical / 2),
-                          hintStyle: hintStyle ??
-                              style.copyWith(
-                                  color: AppColors.hintColor,
-                                  fontWeight: FontWeight.w400),
-                          errorStyle: AppStyles.small.semiBold
-                              .copyWith(color: AppColors.vividPink),
-                          prefixIcon: prefixWidget,
-                          prefix: prefixWidget != null
+                    inputFormatters: inputFormatters,
+                    onChanged: onChanged,
+                    onTap: onTap,
+                    cursorColor: AppThemeData.black,
+                    readOnly: readOnly,
+                    style: style.copyWith(
+                        color: readOnly ? AppThemeData.hintTextColor : null),
+                    decoration: InputDecoration(
+                      isDense: isDense,
+                      filled: true,
+                      fillColor: fillColor ??
+                          (readOnly
+                              ? AppThemeData.grey200
+                              : AppThemeData.white),
+                      hintText: hintText,
+                      errorText: errorText,
+                      contentPadding: EdgeInsets.only(
+                          right: contentPadding.horizontal / 2,
+                          top: contentPadding.vertical / 2,
+                          bottom: contentPadding.vertical / 2),
+                      hintStyle: hintStyle ??
+                          style.copyWith(
+                              color: AppThemeData.hintTextColor,
+                              fontWeight: FontWeight.w400),
+                      errorStyle: AppStyle.defaultF12W3Primary
+                          .copyWith(color: AppThemeData.red),
+                      prefixIcon: prefixWidget,
+                      prefix: prefixWidget != null
+                          ? null
+                          : Padding(
+                              padding: EdgeInsets.only(
+                                  left: contentPadding.horizontal / 2),
+                            ),
+                      suffixIcon: suffixWidget ??
+                          (!isPassword
                               ? null
-                              : Padding(
-                            padding: EdgeInsets.only(
-                                left: contentPadding.horizontal / 2),
-                          ),
-                          suffixIcon: suffixWidget ??
-                              (!isPassword
-                                  ? null
-                                  : Semantics(
-                                label: (obscureIconState.iconState)
-                                    ? 'Show $hintText'
-                                    : 'Hide $hintText',
-                                child: IconButton(
-                                  splashRadius: 0.1,
-                                  padding: EdgeInsets.zero,
-                                  onPressed: () {
-                                    obscureIconContext
-                                        .read<ObscureIconBloc>()
-                                        .add(ObscureIconPressed());
-                                  },
-                                  icon: Tooltip(
-                                    message: (obscureIconState.iconState)
-                                        ? S.current.showPassword
-                                        : S.current.hidePassword,
-                                    child: SvgPicture.asset(
-                                      (obscureIconState.iconState)
-                                          ? AppIcons.showPassword
-                                          : AppIcons.hidePassword,
+                              : Semantics(
+                                  label: (obscureIconState.iconState)
+                                      ? 'Show $hintText'
+                                      : 'Hide $hintText',
+                                  child: IconButton(
+                                    splashRadius: 0.1,
+                                    padding: EdgeInsets.zero,
+                                    onPressed: () {
+                                      obscureIconContext
+                                          .read<ObscureIconBloc>()
+                                          .add(ObscureIconPressed());
+                                    },
+                                    icon: Tooltip(
+                                      message: (obscureIconState.iconState)
+                                          ? "Show password"
+                                          : "Hide password",
+                                      child: SvgPicture.asset(
+                                        (obscureIconState.iconState)
+                                            ? AppAsset.showPassword
+                                            : AppAsset.hidePassword,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              )),
-                          border: border,
-                          enabledBorder: border,
-                          disabledBorder: border,
-                          focusedBorder: border.copyWith(
-                            borderSide:
+                                )),
+                      border: border,
+                      enabledBorder: border,
+                      disabledBorder: border,
+                      focusedBorder: border.copyWith(
+                        borderSide:
                             BorderSide(width: 1, color: focusBorderColor),
-                          ),
-                          errorBorder: border.copyWith(
-                            borderSide: const BorderSide(
-                                width: 1, color: AppColors.vividPink),
-                          ),
-                          focusedErrorBorder: border.copyWith(
-                            borderSide: const BorderSide(
-                                width: 1, color: AppColors.vividPink),
-                          ),
-                        ),
+                      ),
+                      errorBorder: border.copyWith(
+                        borderSide:
+                            const BorderSide(width: 1, color: AppThemeData.red),
+                      ),
+                      focusedErrorBorder: border.copyWith(
+                        borderSide:
+                            const BorderSide(width: 1, color: AppThemeData.red),
                       ),
                     ),
-                  );
-                }),
+                  ),
+                ),
+              );
+            }),
           ],
         ),
       ),
